@@ -1,58 +1,52 @@
-const apiUrl = 'https://opentdb.com/api.php?amount=1&type=multiple&language=hu'; // Kvíz API
-const questionElement = document.getElementById('question');
-const answersElement = document.getElementById('answers');
-const nextButton = document.getElementById('nextQuestion');
+const questions = [
+    {
+        question: "The name of technology company HP stands for what?",
+        answers: ["Hewlett-Packard", "Husker-Pollosk", "Howard Packmann", "Hellman-Pohl"],
+        correct: 0
+    },
+    {
+        question: "Which planet is known as the Red Planet?",
+        answers: ["Mars", "Earth", "Venus", "Jupiter"],
+        correct: 0
+    },
+    {
+        question: "What is the capital of Hungary?",
+        answers: ["Budapest", "Debrecen", "Szeged", "Pécs"],
+        correct: 0
+    }
+];
 
-// API hívás
-function fetchQuestion() {
-    fetch(apiUrl)
-        .then(response => response.json())
-        .then(data => {
-            const question = data.results[0];
-            displayQuestion(question);
-        })
-        .catch(error => {
-            questionElement.innerHTML = "Hiba történt a kvíz betöltésekor.";
-        });
-}
+let currentQuestionIndex = 0;
 
-// Kérdés megjelenítése
-function displayQuestion(question) {
-    questionElement.innerHTML = question.question;
-    const answers = [...question.incorrect_answers, question.correct_answer];
-    shuffleArray(answers); // Véletlenszerű sorrend
+function displayQuestion() {
+    const questionElement = document.getElementById('question');
+    const answersElement = document.getElementById('answers');
+    const question = questions[currentQuestionIndex];
 
+    questionElement.textContent = question.question;
     answersElement.innerHTML = '';
-    answers.forEach(answer => {
+
+    question.answers.forEach((answer, index) => {
         const li = document.createElement('li');
         li.textContent = answer;
-        li.addEventListener('click', () => checkAnswer(answer, question.correct_answer));
+        li.onclick = () => checkAnswer(index);
         answersElement.appendChild(li);
     });
-
-    nextButton.style.display = 'block';
 }
 
-// Ellenőrizni, hogy a válasz helyes-e
-function checkAnswer(answer, correctAnswer) {
-    if (answer === correctAnswer) {
+function checkAnswer(selectedIndex) {
+    const question = questions[currentQuestionIndex];
+    if (selectedIndex === question.correct) {
         alert('Helyes válasz!');
     } else {
-        alert('Helytelen válasz!');
-    }
-    nextButton.style.display = 'block';
-}
-
-// Következő kérdés
-nextButton.addEventListener('click', fetchQuestion);
-
-// Véletlenszerűen keverjük meg a válaszokat
-function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
+        alert('Rossz válasz!');
     }
 }
+
+document.getElementById('next-question').onclick = () => {
+    currentQuestionIndex = (currentQuestionIndex + 1) % questions.length;
+    displayQuestion();
+};
 
 // Első kérdés betöltése
-fetchQuestion();
+displayQuestion();
