@@ -7,13 +7,19 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Napi Kvíz</h1>
-        <p id="question">Mi a helyes válasz?</p>
-        <ul id="answers">
-            <!-- A válaszok ide generálódnak -->
-        </ul>
-        <button id="next-question">Következő kérdés</button>
+    <h1>Napi Kvíz</h1>
+    <div id="kategoria-valasztas">
+        <h2>Válassz kategóriát:</h2>
+        <button onclick="kategoriaValaszt('tortenelem')">Történelem</button>
+        <button onclick="kategoriaValaszt('allatok')">Állatok</button>
+        <button onclick="kategoriaValaszt('technologia')">Technológia</button>
+    </div>
+    <div id="kviz" style="display: none;">
+        <p id="kerdes"></p>
+        <ul id="valaszok"></ul>
+        <p id="visszajelzes"></p>
+        <p>Aktuális pontszám: <span id="pontszam">0</span></p>
+        <button id="kovetkezo-kerdes" onclick="kovetkezoKerdes()">Következő kérdés</button>
     </div>
     <script src="script.js"></script>
 </body>
